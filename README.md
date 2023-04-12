@@ -1,36 +1,26 @@
-# ge0-mod
+<h1 align="center"> > Ge0 Collab-Manager < </h1>
 
-geometry dash mod template using [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) as a package manager
+.
 
-this also uses [mat-dash](https://github.com/matcool/mat-dash) to make hooking syntax simpler (and mod_main (very nice))
+## > Установка
 
-## setup
+Клонирование и конфигурирование/сборка с помощью CMake с использованием X86-MSVC
 
-clone and configure/build with cmake using x86 msvc (too lazy to copy paste the 32 bit clang setup sorry)
-
-### manual setup
-if u want to do it in cmd then
 ```bash
-# Configure
-cmake -B build -A win32
-# Build
-cmake --build build --config Release
+cmake -B build -A win32 # Configure
+cmake --build build --config Release # Build
 ```
 
-## tip
+## > Полезные ссылки
 
-with how cpm works if you want to avoid recloning the same repo multiple times you can look into [CPM_SOURCE_CACHE](https://github.com/cpm-cmake/CPM.cmake#cpm_source_cache)
+[Geode](https://docs.geode-sdk.org/classes/MenuLayer)
 
-## help
+[re-script](https://github.com/matcool/re-scripts/blob/main/classes_gd2.cpp)
 
-for more detailed info for how modding gd works i suggest checking out my [gd-mod-example](https://github.com/matcool/gd-mod-example) repo
+[Дампы функций](https://github.com/matcool/re-scripts/blob/main/func_dump.txt)
 
-## docs
+[Для более подробной информации о том, как работает моддинг](https://github.com/matcool/gd-mod-example)
 
-[geode classes](https://docs.geode-sdk.org/classes/MenuLayer)
-[rescript classes](https://github.com/matcool/re-scripts/blob/main/classes_gd2.cpp)
-[rescript functions dump](https://github.com/matcool/re-scripts/blob/main/func_dump.txt)
+## > VCPkg
 
-## vcpkg
-
-[integration with cmake](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration)
+[Интеграция с CMake](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration)
