@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.14)
 
+set(CMAKE_TOOLCHAIN_FILE "C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(ge0)
+
+include_directories("C:/Program Files/vcpkg/installed/x86-windows/include")
+link_directories("C:/Program Files/vcpkg/installed/x86-windows/lib")
 
 add_library(ge0 SHARED src/main.cpp)
 
@@ -21,4 +26,4 @@ target_include_directories(ge0 PRIVATE
     ${minhook_SOURCE_DIR}/include
 )
 
-target_link_libraries(ge0 mat-dash cocos2d minhook)
+target_link_libraries(ge0 mat-dash cocos2d minhook cpr curl)
