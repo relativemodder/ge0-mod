@@ -11,6 +11,15 @@ cmake -B build -A win32 # Configure
 cmake --build build --config Release # Build
 ```
 
+Установка зависимостей с помощью пакетного менеджера vcpkg. Обязательное нахождение по пути ```C:\Program Files\vcpkg```
+
+Установите **cpr**
+
+```bash
+cd "C:\Program Files\vcpkg"
+./vcpkg install cpr
+```
+
 ## > Полезные ссылки
 
 [Geode](https://docs.geode-sdk.org/classes/MenuLayer)
