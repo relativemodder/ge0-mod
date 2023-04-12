@@ -18,7 +18,6 @@ CPMAddPackage("gh:matcool/mat-dash#294126a")
 CPMAddPackage("gh:HJfod/cocos-headers#1ec524e")
 CPMAddPackage("gh:HJfod/gd.h#056e90e")
 CPMAddPackage("gh:TsudaKageyu/minhook#4a45552")
-CPMAddPackage("gh:nlohmann/json@3.10.5")
 
 target_compile_definitions(ge0 PRIVATE CC_DLL=)
 
@@ -28,4 +27,4 @@ target_include_directories(ge0 PRIVATE
     ${vcpkgRoot}/x86-windows/include
 )
 
-target_link_libraries(ge0 mat-dash cocos2d minhook cpr nlohmann_json::nlohmann_json)
+target_link_libraries(ge0 mat-dash cocos2d minhook cpr)
