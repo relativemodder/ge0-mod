@@ -1,4 +1,4 @@
-# gd-mod-cpm
+# ge0-mod
 
 geometry dash mod template using [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) as a package manager
 
@@ -24,3 +24,13 @@ with how cpm works if you want to avoid recloning the same repo multiple times y
 ## help
 
 for more detailed info for how modding gd works i suggest checking out my [gd-mod-example](https://github.com/matcool/gd-mod-example) repo
+
+## docs
+
+[geode classes](https://docs.geode-sdk.org/classes/MenuLayer)
+[rescript classes](https://github.com/matcool/re-scripts/blob/main/classes_gd2.cpp)
+[rescript functions dump](https://github.com/matcool/re-scripts/blob/main/func_dump.txt)
+
+## vcpkg
+
+[integration with cmake](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration)
