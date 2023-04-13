@@ -10,11 +10,11 @@ project(ge0)
 include_directories("C:/Program Files/vcpkg/installed/x86-windows/include")
 link_directories("C:/Program Files/vcpkg/installed/x86-windows/lib")
 
-add_library(ge0 SHARED src/main.cpp)
+add_library(ge0 SHARED src/main.cpp "src/utils/origs.hpp")
 
 include(cmake/CPM.cmake)
 
-CPMAddPackage("gh:matcool/mat-dash#294126a")
+CPMAddPackage("gh:relativemodder/mat-dash#3a3b639")
 CPMAddPackage("gh:HJfod/cocos-headers#1ec524e")
 CPMAddPackage("gh:HJfod/gd.h#056e90e")
 CPMAddPackage("gh:HJfod/minhook#44b326e")

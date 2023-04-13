@@ -87,19 +87,12 @@ void EditLevelLayer_FLAlert_Clicked(gd::EditLevelLayer* self, gd::FLAlertLayer* 
 }
 
 
-namespace origs {
-    inline bool(__thiscall* EditLevelLayer_init)(gd::EditLevelLayer*, gd::GJGameLevel*);
-}
+bool EditLevelLayer_init_H(gd::EditLevelLayer* self, gd::GJGameLevel* level) {
+    bool result = matdash::orig<&EditLevelLayer_init_H>(self, level);
 
+    gd::AchievementNotifier::sharedState()->notifyAchievement("iow", "wioejfoiwef", nullptr, false);
 
-namespace hooks {
-    inline bool __fastcall EditLevelLayer_init_H(gd::EditLevelLayer* self, void*, gd::GJGameLevel* level) {
-        bool result = origs::EditLevelLayer_init(self, level);
-
-        gd::AchievementNotifier::sharedState()->notifyAchievement("iow", "wioejfoiwef", nullptr, false);
-
-        return result;
-    }
+    return result;
 }
 
 void hook(uintptr_t local_address, void* hook, void** tramp) {
@@ -109,9 +102,9 @@ void hook(uintptr_t local_address, void* hook, void** tramp) {
 
 void mod_main(HMODULE) {
 
-    hook(0x6F5D0, hooks::EditLevelLayer_init_H, (void**)origs::EditLevelLayer_init);
+    hook(0x6F5D0, &EditLevelLayer_init_H, (void**)&matdash::detail::wrappers::template tramp<&EditLevelLayer_init_H>);
 
-    //matdash::add_hook<&EditLevelLayer_init>(gd::base + 0x6F5D0);
+    //matdash::add_hook<&EditLevelLayer_init_H>(gd::base + 0x6F5D0);
     matdash::add_hook<&EditLevelLayer_onShare>(gd::base + 0x71BE0);
     matdash::add_hook<&EditLevelLayer_FLAlert_Clicked>(gd::base + 0x71F80);
 }

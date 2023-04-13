@@ -10,7 +10,14 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x86" ],
-      "cmakeToolchain": "C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "cmakeToolchain": "C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "variables": [
+        {
+          "name": "CPM_DOWNLOAD_ALL",
+          "value": "True",
+          "type": "BOOL"
+        }
+      ]
     }
   ]
 }
