@@ -12,6 +12,8 @@
 // gd.h includes cocos2d.h
 #include <gd.h>
 
+#include <dobby.h>
+
 #include <cpr/cpr.h>
 #include "utils/json.hpp"
 
@@ -85,9 +87,31 @@ void EditLevelLayer_FLAlert_Clicked(gd::EditLevelLayer* self, gd::FLAlertLayer* 
 }
 
 
-void mod_main(HMODULE) {
-    matdash::create_console();
+namespace origs {
+    inline bool(__thiscall* EditLevelLayer_init)(gd::EditLevelLayer*, gd::GJGameLevel*);
+}
 
+
+namespace hooks {
+    inline bool __fastcall EditLevelLayer_init_H(gd::EditLevelLayer* self, void*, gd::GJGameLevel* level) {
+        bool result = origs::EditLevelLayer_init(self, level);
+
+        gd::AchievementNotifier::sharedState()->notifyAchievement("iow", "wioejfoiwef", nullptr, false);
+
+        return result;
+    }
+}
+
+void hook(uintptr_t local_address, void* hook, void** tramp) {
+    DobbyHook((void*)(gd::base + local_address), hook, tramp);
+}
+
+
+void mod_main(HMODULE) {
+
+    hook(0x6F5D0, hooks::EditLevelLayer_init_H, (void**)origs::EditLevelLayer_init);
+
+    //matdash::add_hook<&EditLevelLayer_init>(gd::base + 0x6F5D0);
     matdash::add_hook<&EditLevelLayer_onShare>(gd::base + 0x71BE0);
     matdash::add_hook<&EditLevelLayer_FLAlert_Clicked>(gd::base + 0x71F80);
 }
