@@ -10,7 +10,7 @@ project(ge0)
 include_directories("C:/Program Files/vcpkg/installed/x86-windows/include")
 link_directories("C:/Program Files/vcpkg/installed/x86-windows/lib")
 
-add_library(ge0 SHARED src/main.cpp "src/utils/origs.hpp")
+add_library(ge0 SHARED src/main.cpp "src/utils/origs.hpp" "src/layers/EditLevelLayer.h" "src/utils/hooking.hpp"  "src/utils/linkutils.hpp"     )
 
 include(cmake/CPM.cmake)
 

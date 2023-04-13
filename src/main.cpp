@@ -1,21 +1,15 @@
 #include <matdash.hpp>
-
-// defines add_hook to use minhook
 #include <matdash/minhook.hpp>
-
-// lets you use mod_main
 #include <matdash/boilerplate.hpp>
-
-// matdash::create_console
 #include <matdash/console.hpp>
-
-// gd.h includes cocos2d.h
 #include <gd.h>
 
-#include <dobby.h>
+#include "layers/EditLevelLayer.h"
 
 #include <cpr/cpr.h>
+#include "utils/hooking.hpp"
 #include "utils/json.hpp"
+#include "utils/linkutils.hpp"
 
 using namespace cocos2d;
 
@@ -23,88 +17,72 @@ gd::FLAlertLayer* openAlert;
 bool shareConfirmation;
 CCNode* maybeShareLayer;
 
-const char* get_node_name(CCNode* node) {
-    return typeid(*node).name() + 6;
-}
-
-void EditLevelLayer_onShare(gd::EditLevelLayer* self, CCObject* sender) {
-    matdash::orig<&EditLevelLayer_onShare>(self, nullptr);
-
-    shareConfirmation = false;
-
-    CCScene* parentScene = CCDirector::sharedDirector()->getRunningScene();
-
-    std::cout << "Cocos scene nodes count" << parentScene->getChildrenCount() << std::endl;
-
-    for (int i = 0; i < parentScene->getChildrenCount(); i++) {
-        CCNode* buffer = (CCNode*)(parentScene->getChildren()->objectAtIndex(i));
-        const char* nodename = get_node_name(buffer);
-
-        std::cout << "And the " << i << " element is " << nodename << std::endl;
-
-        if (*nodename == *(std::string("ShareLevelLayer").c_str())) {
-            std::cout << "Setting... ShareLevelLayer " << std::endl;
-
-            maybeShareLayer = (CCNode*)(parentScene->getChildren()->objectAtIndex(i));
-
-            std::cout << "ShareLevelLayer set!" << std::endl;
-        }
-            
+namespace modmain {
+    void onShowCollab(gd::EditLevelLayer* self) {
+        gd::AchievementNotifier::sharedState()->notifyAchievement("Placeholder", "Collab is opening..", nullptr, false);
     }
-    maybeShareLayer->setVisible(false);
 
-    shareConfirmation = true;
-   
-    openAlert = gd::FLAlertLayer::create(self, "Choose", "Share", "Open Collab", "Do you wanna <cg>share level</c> or <cy>open collab?</c>");
-    openAlert->show();
-    
+    void onCreateEditLevelLayer(gd::EditLevelLayer* self, gd::GJGameLevel* level) {
+        gd::AchievementNotifier::sharedState()->notifyAchievement("EditLevelLayer", (std::string("Created with level: ") + std::string(level->m_sLevelName)).c_str(), nullptr, false);
+    }
 }
 
-
-void onShowCollab(gd::EditLevelLayer* self) {
-    gd::AchievementNotifier::sharedState()->notifyAchievement("Placeholder", "Collab is opening..", nullptr, false);
-}
-
-
-void EditLevelLayer_FLAlert_Clicked(gd::EditLevelLayer* self, gd::FLAlertLayer* alert, bool openCollabVariant) {
-
-    if (shareConfirmation) {
-        std::cout << "Open collab: " << openCollabVariant << std::endl;
-
-        if (!openCollabVariant) {
-            maybeShareLayer->setVisible(true);
-        }
-        else {
-            maybeShareLayer->removeFromParent();
-            onShowCollab(self);
-        }
+namespace modmainhooks {
+    void EditLevelLayer_onShare(gd::EditLevelLayer* self, CCObject* sender) {
+        matdash::orig<&EditLevelLayer_onShare>(self, nullptr);
 
         shareConfirmation = false;
+
+        CCScene* parentScene = CCDirector::sharedDirector()->getRunningScene();
+
+        std::cout << "Cocos scene nodes count" << parentScene->getChildrenCount() << std::endl;
+
+        maybeShareLayer = linkutils::find_shareLevelLayer(parentScene);
+        maybeShareLayer->setVisible(false);
+
+        shareConfirmation = true;
+
+        openAlert = gd::FLAlertLayer::create(self, "Choose", "Share", "Open Collab", "Do you wanna <cg>share level</c> or <cy>open collab?</c>");
+        openAlert->show();
+
     }
-    
 
-    matdash::orig<&EditLevelLayer_FLAlert_Clicked>(self, alert, openCollabVariant);
+
+    void EditLevelLayer_FLAlert_Clicked(gd::EditLevelLayer* self, gd::FLAlertLayer* alert, bool openCollabVariant) {
+
+        if (shareConfirmation) {
+            std::cout << "Open collab: " << openCollabVariant << std::endl;
+
+            if (!openCollabVariant) {
+                maybeShareLayer->setVisible(true);
+            }
+            else {
+                maybeShareLayer->removeFromParent();
+                modmain::onShowCollab(self);
+            }
+
+            shareConfirmation = false;
+        }
+
+
+        matdash::orig<&EditLevelLayer_FLAlert_Clicked>(self, alert, openCollabVariant);
+    }
+
+
+    gd::EditLevelLayer* EditLevelLayer_create(gd::GJGameLevel* level) {
+        gd::EditLevelLayer* created_layer = matdash::orig<&EditLevelLayer_create>(level);
+
+        modmain::onCreateEditLevelLayer(created_layer, level);
+
+        return created_layer;
+    }
 }
 
-
-bool EditLevelLayer_init_H(gd::EditLevelLayer* self, gd::GJGameLevel* level) {
-    bool result = matdash::orig<&EditLevelLayer_init_H>(self, level);
-
-    gd::AchievementNotifier::sharedState()->notifyAchievement("iow", "wioejfoiwef", nullptr, false);
-
-    return result;
-}
-
-void hook(uintptr_t local_address, void* hook, void** tramp) {
-    DobbyHook((void*)(gd::base + local_address), hook, tramp);
-}
 
 
 void mod_main(HMODULE) {
 
-    hook(0x6F5D0, &EditLevelLayer_init_H, (void**)&matdash::detail::wrappers::template tramp<&EditLevelLayer_init_H>);
-
-    //matdash::add_hook<&EditLevelLayer_init_H>(gd::base + 0x6F5D0);
-    matdash::add_hook<&EditLevelLayer_onShare>(gd::base + 0x71BE0);
-    matdash::add_hook<&EditLevelLayer_FLAlert_Clicked>(gd::base + 0x71F80);
+    matdash::add_hook<&modmainhooks::EditLevelLayer_create>(gd::base + 0x6F530);
+    matdash::add_hook<&modmainhooks::EditLevelLayer_onShare>(gd::base + 0x71BE0);
+    matdash::add_hook<&modmainhooks::EditLevelLayer_FLAlert_Clicked>(gd::base + 0x71F80);
 }
