@@ -17,7 +17,7 @@ set(DEFAULT_BUILD_TYPE "Release" "RelWithDebInfo")
 include_directories("C:/Program Files/vcpkg/installed/x86-windows/include")
 link_directories("C:/Program Files/vcpkg/installed/x86-windows/lib")
 
-add_library(ge0 SHARED src/main.cpp "src/utils/origs.hpp" "src/layers/EditLevelLayer.h" "src/utils/hooking.hpp"  "src/utils/linkutils.hpp"      "src/pch.hpp")
+add_library(ge0 SHARED src/main.cpp "src/utils/origs.hpp" "src/layers/EditLevelLayer.h" "src/utils/hooking.hpp"  "src/utils/linkutils.hpp"      "src/pch.hpp" "src/modmainhooks.h")
 
 include(cmake/CPM.cmake)
 
