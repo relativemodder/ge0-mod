@@ -1,21 +1,9 @@
-#include <matdash.hpp>
-#include <matdash/minhook.hpp>
-#include <matdash/boilerplate.hpp>
-#include <matdash/console.hpp>
-#include <gd.h>
-
+#include "pch.hpp"
 #include "layers/EditLevelLayer.h"
-
 #include <cpr/cpr.h>
-#include "utils/hooking.hpp"
-#include "utils/json.hpp"
-#include "utils/linkutils.hpp"
 
 using namespace cocos2d;
 
-gd::FLAlertLayer* openAlert;
-bool shareConfirmation;
-CCNode* maybeShareLayer;
 
 namespace modmain {
     void onShowCollab(gd::EditLevelLayer* self) {
@@ -28,6 +16,12 @@ namespace modmain {
 }
 
 namespace modmainhooks {
+
+    gd::FLAlertLayer* openAlert;
+    bool shareConfirmation;
+    CCNode* maybeShareLayer;
+
+
     void EditLevelLayer_onShare(gd::EditLevelLayer* self, CCObject* sender) {
         matdash::orig<&EditLevelLayer_onShare>(self, nullptr);
 
@@ -81,7 +75,6 @@ namespace modmainhooks {
 
 
 void mod_main(HMODULE) {
-
     matdash::add_hook<&modmainhooks::EditLevelLayer_create>(gd::base + 0x6F530);
     matdash::add_hook<&modmainhooks::EditLevelLayer_onShare>(gd::base + 0x71BE0);
     matdash::add_hook<&modmainhooks::EditLevelLayer_FLAlert_Clicked>(gd::base + 0x71F80);

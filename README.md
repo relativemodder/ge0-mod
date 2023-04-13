@@ -20,6 +20,8 @@ cd "C:\Program Files\vcpkg"
 ./vcpkg install cpr
 ```
 
+**Важно!** Наличие библиотеки для хукинга **Dobby.dll** в папке с дллкой релиза. Так вот, её нужно переместить в корневую папку с GeometryDash.exe
+
 ## > Полезные ссылки
 
 [Geode](https://docs.geode-sdk.org/classes/MenuLayer)
